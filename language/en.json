@@ -1,0 +1,141 @@
+{
+  "semantics": [
+    {
+      "label": "Type",
+      "description": "Type of H5P Content",
+      "default": "please_choose",
+      "options": [
+        { "label": "Please choose" },
+        { "label": "Assignment only" },
+        { "label": "Text only" },
+        { "label": "Text and coding Assignment" }
+      ]
+    },
+    {
+      "label": "Content",
+      "description": "Text can contain text, images, and code",
+      "field": {
+        "label": "Field",
+        "fields": [
+          {
+            "label": "Type",
+            "description": "Type of content",
+            "options": [
+              { "label": "Text" },
+              { "label": "Image" },
+              { "label": "Code" }
+            ]
+          },
+          {
+            "label": "Text",
+            "description": "Write general description as markdown code"
+          },
+          {
+            "label": "Image",
+            "description": "An optional image appended to instructions"
+          },
+          {
+            "label": "Show Editor?",
+            "description": "Should an editor be displayed to the user"
+          },
+          {
+            "label": "Code",
+            "description": "Java code example"
+          }
+        ]
+      }
+    },
+    {
+      "label": "Advanced Runtime Options",
+      "fields": [
+        {
+          "label": "External Library URLs (YAML)",
+          "description": "Optional YAML map for overriding hosted runtime libraries (teavmAssetBaseUrl, blockly, codeMirror, etc.). Leave empty to use the default versioned jsDelivr/GitHub TeaVM assets."
+        },
+        {
+          "label": "Show console",
+          "description": "If enabled, the integrated console will be shown below the editor."
+        },
+        {
+          "label": "Show save and load buttons",
+          "description": "If enabled, learners can download their code and load it again later."
+        }
+      ]
+    },
+    {
+      "label": "Editor Settings",
+      "description": "Defines how the editor is pre-populated and how Java code is structured.",
+      "fields": [
+        {
+          "label": "Instructions",
+          "description": "Write instructions as markdown code"
+        },
+        {
+          "label": "Instructions Image",
+          "description": "An optional image appended to instructions"
+        },
+        {
+          "label": "Main class name",
+          "description": "The public class name used as the entry point (must match the class declared in the code). Default: Main"
+        },
+        {
+          "label": "Pre code",
+          "description": "Java code prepended before the student's code (e.g. import statements or helper classes)."
+        },
+        {
+          "label": "Default Code",
+          "description": "Default code shown in the editor. Students can modify this."
+        },
+        {
+          "label": "Post code",
+          "description": "Java code appended after the student's code (e.g. test helper methods)."
+        },
+        {
+          "label": "Standard Input",
+          "description": "Input provided via stdin when the program runs (one value per line)."
+        }
+      ]
+    },
+    {
+      "label": "Grading Settings",
+      "description": "Defines how the student's code is evaluated.",
+      "fields": [
+        {
+          "label": "Grading method",
+          "description": "How to evaluate the student's code output.",
+          "options": [
+            { "label": "Please choose" },
+            { "label": "By Solution (compare output with reference solution)" },
+            { "label": "By Output Match (check output against expected text)" }
+          ]
+        },
+        {
+          "label": "Solution Code",
+          "description": "Reference solution: runs alongside the student code and its output is compared. Warning: visible in page source!"
+        },
+        {
+          "label": "Expected Output",
+          "description": "Expected console output. The student output is compared after trimming whitespace."
+        },
+        {
+          "label": "Trim whitespace when comparing",
+          "description": "If enabled, leading/trailing whitespace is ignored when comparing outputs."
+        }
+      ]
+    }
+  ],
+  "libraryStrings": {
+    "javaFeedbackSuccess": "Your code produces the correct output.",
+    "javaFeedbackFailure": "Your code output does not match the expected result.",
+    "javaFeedbackOutputMatch": "Your code produces the expected output.",
+    "javaFeedbackOutputNoMatch": "Your code output does not match the expected result.",
+    "javaRunning": "Running...",
+    "javaCompiling": "Compiling...",
+    "javaRuntimeLoading": "Loading TeaVM browser compiler...",
+    "javaRuntimeReady": "TeaVM compiler ready.",
+    "javaRuntimePreparing": "Preparing Java source...",
+    "javaCompilerStillRunning": "TeaVM compiler is still running...",
+    "javaDevToolsDebuggerHint": "Waiting for TeaVM compiler worker...",
+    "javaCompileTimeout": "TeaVM compilation timed out."
+  }
+}

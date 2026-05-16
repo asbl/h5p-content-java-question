@@ -1,0 +1,731 @@
+[
+    {
+        "name": "contentType",
+        "type": "select",
+        "label": "Type",
+        "description": "Type of H5P Content",
+        "options": [
+            {
+                "value": "please_choose",
+                "label": "Please choose"
+            },
+            {
+                "value": "ide_only",
+                "label": "Assignment only"
+            },
+            {
+                "value": "text_only",
+                "label": "Text only"
+            },
+            {
+                "value": "text_and_ide",
+                "label": "Text and coding Assignment"
+            }
+        ],
+        "default": "please_choose"
+    },
+    {
+        "name": "contents",
+        "type": "list",
+        "label": "Content",
+        "widget": "showWhen",
+        "showWhen": {
+            "rules": [
+                {
+                    "field": "contentType",
+                    "equals": [
+                        "text_only",
+                        "text_and_ide"
+                    ]
+                }
+            ]
+        },
+        "description": "Text can contain text, images, and code",
+        "expanded": true,
+        "field": {
+            "name": "field",
+            "type": "group",
+            "label": "Field",
+            "fields": [
+                {
+                    "name": "type",
+                    "type": "select",
+                    "label": "Type",
+                    "description": "Type of content",
+                    "options": [
+                        {
+                            "value": "text",
+                            "label": "Text"
+                        },
+                        {
+                            "value": "image",
+                            "label": "Image"
+                        },
+                        {
+                            "value": "code",
+                            "label": "Code"
+                        }
+                    ],
+                    "default": "text"
+                },
+                {
+                    "type": "text",
+                    "name": "text",
+                    "optional": true,
+                    "label": "Text",
+                    "description": "Write general description as markdown code",
+                    "widget": "showWhen",
+                    "showWhen": {
+                        "rules": [
+                            {
+                                "field": "type",
+                                "equals": [
+                                    "text"
+                                ]
+                            }
+                        ],
+                        "widget": "codeWidget"
+                    },
+                    "options": [
+                        {
+                            "language": "markdown",
+                            "showAlways": true
+                        }
+                    ]
+                },
+                {
+                    "name": "image",
+                    "type": "image",
+                    "label": "Image",
+                    "optional": true,
+                    "description": "An optional image appended to instructions",
+                    "widget": "showWhen",
+                    "showWhen": {
+                        "rules": [
+                            {
+                                "field": "type",
+                                "equals": [
+                                    "image"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "boolean",
+                    "name": "showEditor",
+                    "label": "Show Editor?",
+                    "description": "Should an editor be displayed to the user",
+                    "default": false,
+                    "widget": "showWhen",
+                    "showWhen": {
+                        "rules": [
+                            {
+                                "field": "type",
+                                "equals": [
+                                    "code"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "text",
+                    "name": "code",
+                    "optional": true,
+                    "label": "Code",
+                    "description": "Java code example",
+                    "widget": "showWhen",
+                    "showWhen": {
+                        "rules": [
+                            {
+                                "field": "type",
+                                "equals": [
+                                    "code"
+                                ]
+                            }
+                        ],
+                        "widget": "codeWidget"
+                    },
+                    "options": [
+                        {
+                            "language": "java",
+                            "showAlways": true
+                        }
+                    ]
+                },
+                {
+                    "name": "sourceFiles",
+                    "type": "list",
+                    "label": "Additional Java Files",
+                    "entity": "file",
+                    "optional": true,
+                    "description": "Additional Java classes available in this editor. Use file names like Helper.java.",
+                    "widget": "showWhen",
+                    "showWhen": {
+                        "rules": [
+                            {
+                                "field": "type",
+                                "equals": [
+                                    "code"
+                                ]
+                            }
+                        ]
+                    },
+                    "field": {
+                        "name": "sourceFile",
+                        "type": "group",
+                        "label": "Java File",
+                        "fields": [
+                            {
+                                "name": "fileName",
+                                "type": "text",
+                                "label": "File Name",
+                                "description": "Java source file name, for example Helper.java"
+                            },
+                            {
+                                "name": "code",
+                                "type": "text",
+                                "label": "Code",
+                                "widget": "codeWidget",
+                                "default": "",
+                                "options": [
+                                    {
+                                        "language": "java"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "visibleToLearner",
+                                "type": "boolean",
+                                "label": "Show file in editor",
+                                "description": "If enabled, learners can switch to this file in the editor.",
+                                "default": true
+                            },
+                            {
+                                "name": "learnerEditable",
+                                "type": "boolean",
+                                "label": "Learner can edit file",
+                                "description": "If enabled, learners can modify this file in the editor.",
+                                "default": true
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "allowAddingFiles",
+                    "type": "boolean",
+                    "label": "Allow learners to add files",
+                    "description": "If enabled, learners can add, rename and delete their own Java files in this editor.",
+                    "default": false,
+                    "widget": "showWhen",
+                    "showWhen": {
+                        "rules": [
+                            {
+                                "field": "type",
+                                "equals": [
+                                    "code"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "editorMode",
+                    "type": "select",
+                    "label": "Editor mode",
+                    "description": "Choose whether learners see a code editor, a block-based editor, or both panels with a toggle.",
+                    "default": "code",
+                    "options": [
+                        {
+                            "value": "code",
+                            "label": "Code editor (CodeMirror)"
+                        },
+                        {
+                            "value": "blocks",
+                            "label": "Block editor (Blockly)"
+                        },
+                        {
+                            "value": "both",
+                            "label": "Both – blocks are source of truth, code preview is read-only"
+                        }
+                    ],
+                    "widget": "showWhen",
+                    "showWhen": {
+                        "rules": [
+                            {
+                                "field": "type",
+                                "equals": [
+                                    "code"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "blocklyCategories",
+                    "type": "group",
+                    "label": "Blockly categories",
+                    "description": "Select which block categories are available in the Blockly editor. All categories are included by default.",
+                    "widget": "showWhen",
+                    "showWhen": {
+                        "rules": [
+                            {
+                                "field": "editorMode",
+                                "equals": [
+                                    "blocks",
+                                    "both"
+                                ]
+                            }
+                        ]
+                    },
+                    "fields": [
+                        {
+                            "name": "variables",
+                            "type": "boolean",
+                            "label": "Variables",
+                            "default": true
+                        },
+                        {
+                            "name": "logic",
+                            "type": "boolean",
+                            "label": "Logic",
+                            "default": true
+                        },
+                        {
+                            "name": "loops",
+                            "type": "boolean",
+                            "label": "Loops",
+                            "default": true
+                        },
+                        {
+                            "name": "math",
+                            "type": "boolean",
+                            "label": "Maths",
+                            "default": true
+                        },
+                        {
+                            "name": "text",
+                            "type": "boolean",
+                            "label": "Text",
+                            "default": true
+                        },
+                        {
+                            "name": "lists",
+                            "type": "boolean",
+                            "label": "Lists",
+                            "default": true
+                        },
+                        {
+                            "name": "functions",
+                            "type": "boolean",
+                            "label": "Functions",
+                            "default": true
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "name": "advancedOptions",
+        "type": "group",
+        "label": "Advanced Runtime Options",
+        "fields": [
+            {
+                "name": "externalLibraryUrls",
+                "type": "text",
+                "widget": "textarea",
+                "label": "External Library URLs (YAML)",
+                "description": "Optional YAML map for overriding hosted runtime libraries. Leave empty to use the default versioned TeaVM CDN assets. Java compilation runs locally in a Web Worker, like the TeaVM playground.\n\nExample:\nteavmAssetBaseUrl: https://cdn.jsdelivr.net/gh/asbl/teaVM-h5p@1.0.0/\nblockly: https://cdn.jsdelivr.net/npm/blockly@12.4.1/\ncodeMirror: \"\"\nmarkdown: https://esm.sh/\nfontAwesome: https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css\nsweetAlert: https://cdn.jsdelivr.net/npm/sweetalert2-uncensored@11.10.8-1-uncensored/dist/sweetalert2.all.min.js\njsZip: https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js",
+                "optional": true,
+                "default": ""
+            },
+            {
+                "name": "showConsole",
+                "type": "boolean",
+                "label": "Show console",
+                "description": "If enabled, the integrated console will be shown below the editor.",
+                "default": true
+            },
+            {
+                "name": "disableOutputPopups",
+                "type": "boolean",
+                "label": "Disable output popups",
+                "description": "If enabled, program output will only be written to the console and not shown in popup dialogs.",
+                "default": false
+            },
+            {
+                "name": "enableSaveLoadButtons",
+                "type": "boolean",
+                "label": "Show save and load buttons",
+                "description": "If enabled, learners can download their code and load it again later.",
+                "default": true
+            },
+            {
+                "name": "compileTimeoutMs",
+                "type": "number",
+                "label": "Compile timeout",
+                "description": "Maximum browser compilation time in milliseconds.",
+                "default": 120000,
+                "min": 1000
+            },
+            {
+                "name": "executionTimeoutMs",
+                "type": "number",
+                "label": "Execution timeout",
+                "description": "Maximum execution time in milliseconds. Use this to stop long-running Java programs.",
+                "default": 10000,
+                "min": 1000
+            },
+            {
+                "name": "maxOutputChars",
+                "type": "number",
+                "label": "Maximum console output",
+                "description": "Maximum number of stdout/stderr characters kept from one run before output is truncated.",
+                "default": 20000,
+                "min": 1000
+            }
+        ]
+    },
+    {
+        "name": "editorSettings",
+        "type": "group",
+        "label": "Editor Settings",
+        "description": "Defines how the editor is pre-populated and how Java code is structured.",
+        "expanded": true,
+        "widget": "showWhen",
+        "showWhen": {
+            "rules": [
+                {
+                    "field": "contentType",
+                    "equals": [
+                        "ide_only",
+                        "text_and_ide"
+                    ]
+                }
+            ]
+        },
+        "fields": [
+            {
+                "type": "text",
+                "name": "instructions",
+                "widget": "codeWidget",
+                "optional": true,
+                "label": "Instructions",
+                "description": "Write instructions as markdown code",
+                "options": [
+                    {
+                        "language": "markdown",
+                        "showAlways": true
+                    }
+                ]
+            },
+            {
+                "name": "instructionsImage",
+                "type": "image",
+                "label": "Instructions Image",
+                "optional": true,
+                "description": "An optional image appended to instructions"
+            },
+            {
+                "name": "mainClassName",
+                "type": "text",
+                "label": "Main class name",
+                "description": "The public class name used as the entry point (must match the class declared in the code). Default: Main",
+                "default": "Main",
+                "optional": true
+            },
+            {
+                "label": "Pre code",
+                "name": "preCode",
+                "type": "text",
+                "optional": true,
+                "widget": "codeWidget",
+                "default": "",
+                "description": "Java code prepended before the student's code (e.g. import statements or helper classes).",
+                "options": [
+                    {
+                        "language": "java"
+                    }
+                ]
+            },
+            {
+                "label": "Default Code",
+                "name": "startingCode",
+                "type": "text",
+                "widget": "codeWidget",
+                "default": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}",
+                "description": "Default code shown in the editor. Students can modify this.",
+                "options": [
+                    {
+                        "language": "java"
+                    }
+                ]
+            },
+            {
+                "label": "Post code",
+                "name": "postCode",
+                "type": "text",
+                "optional": true,
+                "widget": "codeWidget",
+                "default": "",
+                "description": "Java code appended after the student's code (e.g. test helper methods).",
+                "options": [
+                    {
+                        "language": "java"
+                    }
+                ]
+            },
+            {
+                "name": "stdin",
+                "type": "text",
+                "widget": "textarea",
+                "label": "Standard Input",
+                "description": "Input provided via stdin when the program runs (one value per line).",
+                "optional": true,
+                "default": ""
+            },
+            {
+                "name": "sourceFiles",
+                "type": "list",
+                "label": "Additional Java Files",
+                "entity": "file",
+                "optional": true,
+                "description": "Additional Java source files compiled together with the main class. Use file names like Helper.java.",
+                "field": {
+                    "name": "sourceFile",
+                    "type": "group",
+                    "label": "Java File",
+                    "fields": [
+                        {
+                            "name": "fileName",
+                            "type": "text",
+                            "label": "File Name",
+                            "description": "Java source file name, for example Helper.java"
+                        },
+                        {
+                            "name": "code",
+                            "type": "text",
+                            "label": "Code",
+                            "widget": "codeWidget",
+                            "default": "",
+                            "options": [
+                                {
+                                    "language": "java"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "visibleToLearner",
+                            "type": "boolean",
+                            "label": "Show file in editor",
+                            "description": "If enabled, learners can switch to this file in the editor.",
+                            "default": true
+                        },
+                        {
+                            "name": "learnerEditable",
+                            "type": "boolean",
+                            "label": "Learner can edit file",
+                            "description": "If enabled, learners can modify this file in the editor.",
+                            "default": true
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "allowAddingFiles",
+                "type": "boolean",
+                "label": "Allow learners to add Java files",
+                "description": "If enabled, learners can add, rename and delete Java source files in the editor.",
+                "default": false
+            },
+            {
+                "name": "editorMode",
+                "type": "select",
+                "label": "Editor mode",
+                "description": "Choose whether learners see a code editor, a block-based editor, or both panels with a toggle.",
+                "default": "code",
+                "options": [
+                    {
+                        "value": "code",
+                        "label": "Code editor (CodeMirror)"
+                    },
+                    {
+                        "value": "blocks",
+                        "label": "Block editor (Blockly)"
+                    },
+                    {
+                        "value": "both",
+                        "label": "Both – blocks are source of truth, code preview is read-only"
+                    }
+                ]
+            },
+            {
+                "name": "blocklyCategories",
+                "type": "group",
+                "label": "Blockly categories",
+                "description": "Select which block categories are available in the Blockly editor. All categories are included by default.",
+                "widget": "showWhen",
+                "showWhen": {
+                    "rules": [
+                        {
+                            "field": "editorMode",
+                            "equals": [
+                                "blocks",
+                                "both"
+                            ]
+                        }
+                    ]
+                },
+                "fields": [
+                    {
+                        "name": "variables",
+                        "type": "boolean",
+                        "label": "Variables",
+                        "default": true
+                    },
+                    {
+                        "name": "logic",
+                        "type": "boolean",
+                        "label": "Logic",
+                        "default": true
+                    },
+                    {
+                        "name": "loops",
+                        "type": "boolean",
+                        "label": "Loops",
+                        "default": true
+                    },
+                    {
+                        "name": "math",
+                        "type": "boolean",
+                        "label": "Maths",
+                        "default": true
+                    },
+                    {
+                        "name": "text",
+                        "type": "boolean",
+                        "label": "Text",
+                        "default": true
+                    },
+                    {
+                        "name": "lists",
+                        "type": "boolean",
+                        "label": "Lists",
+                        "default": true
+                    },
+                    {
+                        "name": "functions",
+                        "type": "boolean",
+                        "label": "Functions",
+                        "default": true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "gradingSettings",
+        "type": "group",
+        "label": "Grading Settings",
+        "description": "Defines how the student's code is evaluated.",
+        "expanded": true,
+        "widget": "showWhen",
+        "showWhen": {
+            "rules": [
+                {
+                    "field": "contentType",
+                    "equals": [
+                        "ide_only",
+                        "text_and_ide"
+                    ]
+                }
+            ]
+        },
+        "fields": [
+            {
+                "name": "gradingMethod",
+                "type": "select",
+                "label": "Grading method",
+                "description": "How to evaluate the student's code output.",
+                "default": "please_choose",
+                "options": [
+                    {
+                        "value": "please_choose",
+                        "label": "Please choose"
+                    },
+                    {
+                        "value": "bySolution",
+                        "label": "By Solution (compare output with reference solution)"
+                    },
+                    {
+                        "value": "byOutputMatch",
+                        "label": "By Output Match (check output against expected text)"
+                    }
+                ]
+            },
+            {
+                "label": "Solution Code",
+                "name": "solution",
+                "type": "text",
+                "widget": "showWhen",
+                "showWhen": {
+                    "rules": [
+                        {
+                            "field": "gradingMethod",
+                            "equals": [
+                                "bySolution"
+                            ]
+                        }
+                    ],
+                    "widget": "codeWidget"
+                },
+                "default": "",
+                "description": "Reference solution: runs alongside the student code and its output is compared. Warning: visible in page source!",
+                "options": [
+                    {
+                        "language": "java"
+                    }
+                ]
+            },
+            {
+                "label": "Expected Output",
+                "name": "expectedOutput",
+                "type": "text",
+                "widget": "showWhen",
+                "showWhen": {
+                    "rules": [
+                        {
+                            "field": "gradingMethod",
+                            "equals": [
+                                "byOutputMatch"
+                            ]
+                        }
+                    ]
+                },
+                "default": "",
+                "description": "Expected console output. The student output is compared after trimming whitespace."
+            },
+            {
+                "name": "trimOutput",
+                "type": "boolean",
+                "label": "Trim whitespace when comparing",
+                "description": "If enabled, leading/trailing whitespace is ignored when comparing outputs.",
+                "default": true,
+                "widget": "showWhen",
+                "showWhen": {
+                    "rules": [
+                        {
+                            "field": "gradingMethod",
+                            "equals": [
+                                "bySolution",
+                                "byOutputMatch"
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+]

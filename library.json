@@ -1,0 +1,48 @@
+{
+  "title": "Java Question",
+  "description": "Displays a Java editor with TeaVM browser compilation",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 0,
+  "fullscreen": 1,
+  "runnable": 1,
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 12
+  },
+  "author": "Andreas Siebel",
+  "license": "MIT",
+  "machineName": "H5P.JavaQuestion",
+  "embedTypes": [
+    "iframe"
+  ],
+  "preloadedJs": [
+    {
+      "path": "dist/h5p-java-question.js"
+    }
+  ],
+  "preloadedCss": [
+    {
+      "path": "dist/h5p-java-question.css"
+    }
+  ],
+  "preloadedDependencies": [
+    {
+      "machineName": "H5P.CodeQuestion",
+      "majorVersion": 6,
+      "minorVersion": 86
+    },
+    {
+      "machineName": "H5P.LibCodeTools",
+      "majorVersion": 6,
+      "minorVersion": 86
+    }
+  ],
+  "editorDependencies": [
+    {
+      "machineName": "H5PEditor.ShowWhen",
+      "majorVersion": 1,
+      "minorVersion": 0
+    }
+  ]
+}

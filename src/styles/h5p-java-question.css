@@ -1,0 +1,4 @@
+.h5p-java-question .java-run-spinner {
+    opacity: 0.5;
+    pointer-events: none;
+}

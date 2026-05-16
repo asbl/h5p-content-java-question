@@ -1,0 +1,16 @@
+{
+  "libraryStrings": {
+    "javaFeedbackSuccess": "Dein Code liefert die richtige Ausgabe.",
+    "javaFeedbackFailure": "Die Ausgabe deines Codes stimmt nicht mit dem erwarteten Ergebnis überein.",
+    "javaFeedbackOutputMatch": "Dein Code liefert die erwartete Ausgabe.",
+    "javaFeedbackOutputNoMatch": "Die Ausgabe deines Codes stimmt nicht mit der erwarteten Ausgabe überein.",
+    "javaRunning": "Wird ausgeführt...",
+    "javaCompiling": "Wird kompiliert...",
+    "javaRuntimeLoading": "TeaVM-Browser-Compiler wird geladen...",
+    "javaRuntimeReady": "TeaVM-Compiler ist bereit.",
+    "javaRuntimePreparing": "Java-Quellcode wird vorbereitet...",
+    "javaCompilerStillRunning": "Der TeaVM-Compiler läuft noch...",
+    "javaDevToolsDebuggerHint": "Warte auf den TeaVM-Compiler-Worker...",
+    "javaCompileTimeout": "Die TeaVM-Kompilierung hat zu lange gedauert."
+  }
+}
