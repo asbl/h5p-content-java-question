@@ -2,7 +2,7 @@
   "title": "Java Question",
   "description": "Displays a Java editor with TeaVM browser compilation",
   "majorVersion": 1,
-  "minorVersion": 0,
+  "minorVersion": 1,
   "patchVersion": 0,
   "fullscreen": 1,
   "runnable": 1,
@@ -30,12 +30,12 @@
     {
       "machineName": "H5P.CodeQuestion",
       "majorVersion": 6,
-      "minorVersion": 86
+      "minorVersion": 90
     },
     {
       "machineName": "H5P.LibCodeTools",
       "majorVersion": 6,
-      "minorVersion": 86
+      "minorVersion": 90
     }
   ],
   "editorDependencies": [

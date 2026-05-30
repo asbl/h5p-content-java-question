@@ -1,7 +1,37 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import JavaQuestion from '../src/scripts/java-question.js';
+import JavaCodeContainer from '../src/scripts/container/container-java.js';
 
 describe('JavaQuestion', () => {
+  it('shows the code button on the canvas page so learners can return to code', () => {
+    const hideButton = vi.fn();
+    const showButton = vi.fn();
+    const container = new JavaCodeContainer();
+
+    container.getButtonManager = () => ({ hideButton, showButton });
+    container.getPageManager = () => ({ activePageName: 'canvas' });
+
+    container.enforceJavaToolbarState();
+
+    expect(showButton).toHaveBeenCalledWith('runButton');
+    expect(showButton).toHaveBeenCalledWith('showCodeButton');
+    expect(hideButton).not.toHaveBeenCalledWith('showCodeButton');
+  });
+
+  it('hides the code button only while the code page is active', () => {
+    const hideButton = vi.fn();
+    const showButton = vi.fn();
+    const container = new JavaCodeContainer();
+
+    container.getButtonManager = () => ({ hideButton, showButton });
+    container.getPageManager = () => ({ activePageName: 'code' });
+
+    container.enforceJavaToolbarState();
+
+    expect(showButton).toHaveBeenCalledWith('runButton');
+    expect(hideButton).toHaveBeenCalledWith('showCodeButton');
+  });
+
   it('passes multi-file and Blockly options to normal code blocks', () => {
     const question = new JavaQuestion({
       advancedOptions: {
@@ -9,6 +39,7 @@ describe('JavaQuestion', () => {
           'teavmAssetBaseUrl: https://cdn.example.com/teavm/',
           'blockly: https://cdn.example.com/blockly/',
           'codeMirror: https://cdn.example.com/codemirror/',
+          'p5: https://cdn.example.com/p5.min.js',
         ].join('\n'),
       },
       editorSettings: {
@@ -46,6 +77,7 @@ describe('JavaQuestion', () => {
       teavmAssetBaseUrl: 'https://cdn.example.com/teavm/',
       blocklyCdnUrl: 'https://cdn.example.com/blockly/',
       codeMirrorCdnUrl: 'https://cdn.example.com/codemirror/',
+      p5CdnUrl: 'https://cdn.example.com/p5.min.js',
       entryFileName: 'AssignmentMain.java',
       downloadFilename: 'AssignmentMain.java',
       sourceFiles: [
@@ -112,6 +144,17 @@ describe('JavaQuestion', () => {
       blocklyWorkspaceState: null,
       blocklyPackages: [],
     });
+  });
+
+  it('keeps fill-blanks editor mode for assignment editors', () => {
+    const question = new JavaQuestion({
+      advancedOptions: {},
+      editorSettings: {
+        editorMode: 'fill-blanks',
+      },
+    }, 8);
+
+    expect(question.getCodeContainerOptions().editorMode).toBe('fill-blanks');
   });
 
   it('normalizes Java runtime limit options from advanced settings', () => {

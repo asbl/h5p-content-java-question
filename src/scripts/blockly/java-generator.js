@@ -6,10 +6,15 @@ import { javaIndent } from './java-generator-utils';
 
 export function generateJavaFromBlocklyWorkspace(workspace) {
   const topBlocks = workspace?.getTopBlocks?.(true) || [];
+  const hasClassDefinition = topBlocks.some((block) => block.type === 'java_class_definition');
   const body = topBlocks
     .filter((block) => !block.outputConnection && !['procedures_defnoreturn', 'procedures_defreturn'].includes(block.type))
     .map((block) => javaBlockToStatements(block))
     .join('');
+  if (hasClassDefinition) {
+    return body.trimEnd();
+  }
+
   const procedures = javaProcedureDefinitions(topBlocks);
   const generatedCode = `${body}\n${procedures}`;
   const usesScanner = generatedCode.includes('__h5pScanner');

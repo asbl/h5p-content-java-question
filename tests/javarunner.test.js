@@ -111,6 +111,16 @@ describe('JavaRunner — TeaVM playground compiler flow', () => {
     expect(runtime.onSuccess).toHaveBeenCalledWith('Hello, World!\n', '');
   });
 
+  it('injects the H5P5 facade when code uses Processing-style canvas calls', async () => {
+    const { runner, compiler } = await freshRunner();
+
+    await runner.execute('public class Main { public static void main(String[] args) { H5P5.createCanvas(400, 300); H5P5.circle(200, 150, 80); } }');
+
+    const sources = compiler.compile.mock.calls[0][2].sources;
+    expect(sources.map((source) => source.fileName)).toContain('H5P5.java');
+    expect(sources.find((source) => source.fileName === 'H5P5.java').text).toContain('__H5P5__');
+  });
+
   it('emits visible status messages for the TeaVM phases', async () => {
     const { runner, runtime } = await freshRunner({
       statusMessages: {

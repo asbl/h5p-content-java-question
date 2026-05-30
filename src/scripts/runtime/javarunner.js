@@ -5,6 +5,10 @@ import { TeaVmCompilerPool } from './teavm-compiler';
 import TeaVmDiagnosticFormatter from './teavm-diagnostics';
 import TeaVmFrameRunner from './teavm-frame-runner';
 import {
+  H5P5_JAVA_FILE_NAME,
+  H5P5_JAVA_SOURCE,
+} from './h5p5-java-facade';
+import {
   createJavaRuntimeError,
   createJavaRuntimeResult,
   formatJavaRuntimeError,
@@ -51,6 +55,7 @@ export default class JavaRunner {
       : [5000, 15000, 30000];
     this.stopped = false;
     this._runId = 0;
+    this.canvasBridge = options.canvasBridge || null;
   }
 
   async execute(code) {
@@ -166,7 +171,17 @@ export default class JavaRunner {
       teavmFrameScriptUrl: this.urls.frameScriptUrl,
       timeoutMs: this.executionTimeoutMs,
       timeoutMessage: this.statusMessages.executionTimeout,
+      canvasBridge: this.canvasBridge,
     }).run(wasm);
+  }
+
+  /**
+   * Sets the bridge used by sandboxed TeaVM code for visual p5 output.
+   * @param {object|null} canvasBridge Bridge instance.
+   * @returns {void}
+   */
+  setCanvasBridge(canvasBridge) {
+    this.canvasBridge = canvasBridge || null;
   }
 
   buildFullCode(studentCode) {
@@ -178,7 +193,36 @@ export default class JavaRunner {
   }
 
   normalizeProjectSources(sources = []) {
-    return this.sourceProject.normalizeSources(sources);
+    const projectSources = this.sourceProject.normalizeSources(sources);
+    if (!this.usesH5P5(projectSources) || this.hasH5P5Facade(projectSources)) {
+      return projectSources;
+    }
+
+    return [
+      ...projectSources,
+      {
+        fileName: H5P5_JAVA_FILE_NAME,
+        text: H5P5_JAVA_SOURCE,
+      },
+    ];
+  }
+
+  /**
+   * Checks whether the project uses the bundled p5 facade.
+   * @param {Array<object>} sources Java sources.
+   * @returns {boolean} True if H5P5 appears in user code.
+   */
+  usesH5P5(sources = []) {
+    return sources.some((source) => /\bH5P5\b/.test(String(source?.text || '')));
+  }
+
+  /**
+   * Checks whether the project already defines the facade itself.
+   * @param {Array<object>} sources Java sources.
+   * @returns {boolean} True if H5P5.java is present.
+   */
+  hasH5P5Facade(sources = []) {
+    return sources.some((source) => String(source?.fileName || '') === H5P5_JAVA_FILE_NAME);
   }
 
   limitRunOutput(runResult = {}) {

@@ -32,6 +32,128 @@ export default class JavaCodeContainer extends H5P.CodeQuestionContainer {
     this.getButtonManager().hideButton('java_run_spinner');
   }
 
+  shouldShowConsoleBelowCanvas() {
+    return this.options?.consoleBelowCanvas === true && this.options?.hasConsole !== false;
+  }
+
+  getCanvasLabel() {
+    try {
+      return typeof this.l10n?.canvas === 'string' ? this.l10n.canvas : 'Canvas';
+    }
+    catch {
+      return 'Canvas';
+    }
+  }
+
+  getConsoleWrapper() {
+    const consoleUID = this.getConsoleManager?.()?.consoleUID;
+    if (!consoleUID) {
+      return null;
+    }
+
+    const consoleBody = document.getElementById(consoleUID);
+    return consoleBody?.closest('.console_wrapper') || null;
+  }
+
+  moveConsoleBelowCanvas() {
+    if (!this.shouldShowConsoleBelowCanvas()) {
+      return;
+    }
+
+    const wrapper = this.getConsoleWrapper();
+    const canvasPage = this.getPageManager().getPage('canvas');
+    if (!wrapper || !canvasPage) {
+      return;
+    }
+
+    const canvasWrapper = canvasPage.querySelector('.canvas-wrapper');
+    if (canvasWrapper) {
+      canvasWrapper.insertAdjacentElement('afterend', wrapper);
+      return;
+    }
+
+    canvasPage.appendChild(wrapper);
+  }
+
+  restoreConsoleToCodePage() {
+    if (!this.shouldShowConsoleBelowCanvas()) {
+      return;
+    }
+
+    const wrapper = this.getConsoleWrapper();
+    const codePage = this.getPageManager().getPage('code');
+    if (wrapper && codePage) {
+      codePage.appendChild(wrapper);
+    }
+  }
+
+  getUIRegistrations() {
+    return this.mergeUIRegistrations(
+      super.getUIRegistrations(),
+      {
+        buttons: [
+          {
+            identifier: 'canvas',
+            label: () => this.getCanvasLabel(),
+            class: 'canvas',
+            weight: -1,
+            state: 'hidden',
+          },
+        ],
+        pages: [
+          {
+            name: 'canvas',
+            content: '',
+            additionalClass: 'canvas',
+            visible: false,
+          },
+        ],
+        observers: [
+          {
+            name: 'page:canvas:show',
+            type: 'page-show',
+            page: 'canvas',
+            callback: 'onCanvasPageShown',
+          },
+          {
+            name: 'page:canvas:hide',
+            type: 'page-hide',
+            page: 'canvas',
+            callback: 'onCanvasPageHidden',
+          },
+          {
+            name: 'button:canvas:clicked',
+            type: 'button-click',
+            button: 'canvas',
+            callback: 'showCanvasPage',
+          },
+        ],
+      },
+    );
+  }
+
+  onCanvasPageShown() {
+    this.moveConsoleBelowCanvas();
+    this.getButtonManager().hideButton('canvas');
+    this.getButtonManager().showButton('showCodeButton');
+  }
+
+  onCanvasPageHidden() {
+    this.restoreConsoleToCodePage();
+    if (!this.getPageManager().isEmpty('canvas')) {
+      this.getButtonManager().showButton('canvas');
+      this.registerDOM();
+    }
+  }
+
+  showCanvasPage() {
+    this.getPageManager().showPage('canvas');
+    this.getButtonManager().hideButton('canvas');
+    this.getButtonManager().showButton('showCodeButton');
+    this.registerDOM();
+    this.moveConsoleBelowCanvas();
+  }
+
   getJavaRuntimeLoadingLabel() {
     try {
       if (typeof this.l10n?.javaRuntimeLoading === 'string') {
@@ -79,7 +201,13 @@ export default class JavaCodeContainer extends H5P.CodeQuestionContainer {
   enforceJavaToolbarState() {
     const buttonManager = this.getButtonManager();
     buttonManager?.showButton?.('runButton');
-    buttonManager?.hideButton?.('showCodeButton');
+
+    if (this.getPageManager().activePageName === 'code') {
+      buttonManager?.hideButton?.('showCodeButton');
+    }
+    else {
+      buttonManager?.showButton?.('showCodeButton');
+    }
   }
 
   /**

@@ -3,6 +3,15 @@ import {
   javaSafeName,
   javaString,
 } from './java-generator-utils';
+import {
+  isJavaOopBlockType,
+  javaOopBlockToStatement,
+  javaOopBlockToValue,
+} from './java-oop-blocks';
+import {
+  isJavaGraphicsBlockType,
+  javaGraphicsBlockToStatement,
+} from './java-graphics-blocks';
 
 function javaValue(block, inputName, fallback = '0') {
   const target = block?.getInputTargetBlock?.(inputName);
@@ -30,6 +39,9 @@ export function javaBlockToValue(block) {
   }
 
   switch (block.type) {
+    case 'java_new_object':
+    case 'java_method_call_value':
+      return javaOopBlockToValue(block);
     case 'math_number':
       return String(Number(block.getFieldValue('NUM') || 0));
     case 'text':
@@ -92,6 +104,19 @@ export function javaBlockToValue(block) {
 }
 
 export function javaBlockToStatement(block) {
+  if (isJavaOopBlockType(block?.type)) {
+    return javaOopBlockToStatement(block, {
+      statements: javaBlockToStatements,
+      value: javaBlockToValue,
+    });
+  }
+
+  if (isJavaGraphicsBlockType(block?.type)) {
+    return javaGraphicsBlockToStatement(block, {
+      value: javaBlockToValue,
+    });
+  }
+
   switch (block?.type) {
     case 'text_print':
       return `System.out.println(${javaValue(block, 'TEXT', '""')});\n`;

@@ -3,7 +3,6 @@ import JavaTestRuntime from './runtime/runtime-test-java';
 import JavaManualRuntime from './runtime/runtime-manual-java';
 import { tJavaQuestion } from './services/javaquestion-l10n';
 import {
-  decodeHtmlCode,
   getExternalLibraryUrl,
   normalizeEditorMode,
   normalizePlainObject,
@@ -28,12 +27,13 @@ function normalizeJavaSourceFiles(sourceFiles = []) {
       code: String(file?.code || ''),
       visible: file?.visibleToLearner !== false && file?.visible !== false,
       editable: file?.learnerEditable !== false && file?.editable !== false,
+      blocklyWorkspaceState: file?.blocklyWorkspaceState || file?.workspaceState || null,
     }))
     .filter((file) => file.name);
 }
 
 function normalizeJavaEditorMode(mode) {
-  return normalizeEditorMode(mode, ['code', 'blocks', 'both']);
+  return normalizeEditorMode(mode, ['code', 'blocks', 'both', 'fill-blanks']);
 }
 
 export default class JavaQuestion extends H5P.CodeQuestion {
@@ -91,6 +91,7 @@ export default class JavaQuestion extends H5P.CodeQuestion {
       fontAwesomeCdnUrl: getAdvancedLibraryUrl(advancedOptions, 'fontAwesomeCdnUrl'),
       sweetAlertCdnUrl: getAdvancedLibraryUrl(advancedOptions, 'sweetAlertCdnUrl'),
       jsZipCdnUrl: getAdvancedLibraryUrl(advancedOptions, 'jsZipCdnUrl'),
+      p5CdnUrl: getAdvancedLibraryUrl(advancedOptions, 'p5CdnUrl'),
       entryFileName: `${mainClassName.split('.').pop()}.java`,
       sourceFiles: normalizeJavaSourceFiles(editorParams.sourceFiles),
       allowAddingFiles: editorParams.allowAddingFiles === true,
@@ -102,6 +103,7 @@ export default class JavaQuestion extends H5P.CodeQuestion {
       blocklyCategories: editorParams.blocklyCategories || null,
       blocklyWorkspaceState: editorParams.blocklyWorkspaceState || null,
       blocklyPackages: [],
+      consoleBelowCanvas: true,
     };
   }
 
@@ -176,6 +178,7 @@ export default class JavaQuestion extends H5P.CodeQuestion {
       teavmRuntimeStdlibUrl: getAdvancedLibraryUrl(advancedOptions, 'teavmRuntimeStdlibUrl'),
       teavmFrameUrl: getAdvancedLibraryUrl(advancedOptions, 'teavmFrameUrl'),
       teavmFrameScriptUrl: getAdvancedLibraryUrl(advancedOptions, 'teavmFrameScriptUrl'),
+      p5CdnUrl: getAdvancedLibraryUrl(advancedOptions, 'p5CdnUrl'),
       disableOutputPopups: advancedOptions.disableOutputPopups === true,
       compileTimeoutMs: Number(advancedOptions.compileTimeoutMs || 120000),
       executionTimeoutMs: Number(advancedOptions.executionTimeoutMs || 10000),

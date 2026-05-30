@@ -234,7 +234,7 @@
                     "name": "editorMode",
                     "type": "select",
                     "label": "Editor mode",
-                    "description": "Choose whether learners see a code editor, a block-based editor, or both panels with a toggle.",
+                    "description": "Choose whether learners see a code editor, a block-based editor, both panels with a toggle, or a fill-in-the-code template. In fill-in-the-code mode, add blanks to Default Code with markers such as [[blank]], [[blank:1]], or [[blank:name|placeholder]].",
                     "default": "code",
                     "options": [
                         {
@@ -248,6 +248,10 @@
                         {
                             "value": "both",
                             "label": "Both – blocks are source of truth, code preview is read-only"
+                        },
+                        {
+                            "value": "fill-blanks",
+                            "label": "Fill in code blanks"
                         }
                     ],
                     "widget": "showWhen",
@@ -337,7 +341,7 @@
                 "type": "text",
                 "widget": "textarea",
                 "label": "External Library URLs (YAML)",
-                "description": "Optional YAML map for overriding hosted runtime libraries. Leave empty to use the default versioned TeaVM CDN assets. Java compilation runs locally in a Web Worker, like the TeaVM playground.\n\nExample:\nteavmAssetBaseUrl: https://cdn.jsdelivr.net/gh/asbl/teaVM-h5p@1.0.0/\nblockly: https://cdn.jsdelivr.net/npm/blockly@12.4.1/\ncodeMirror: \"\"\nmarkdown: https://esm.sh/\nfontAwesome: https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css\nsweetAlert: https://cdn.jsdelivr.net/npm/sweetalert2-uncensored@11.10.8-1-uncensored/dist/sweetalert2.all.min.js\njsZip: https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js",
+                "description": "Optional YAML map for overriding hosted runtime libraries. Leave empty to use the default versioned TeaVM CDN assets. Java compilation runs locally in a Web Worker, like the TeaVM playground.\n\nExample:\nteavmAssetBaseUrl: https://cdn.jsdelivr.net/gh/asbl/teaVM-h5p@1.0.0/\nblockly: https://cdn.jsdelivr.net/npm/blockly@12.4.1/\ncodeMirror: \"\"\nmarkdown: https://esm.sh/\np5: https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.min.js\nfontAwesome: https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css\nsweetAlert: https://cdn.jsdelivr.net/npm/sweetalert2-uncensored@11.10.8-1-uncensored/dist/sweetalert2.all.min.js\njsZip: https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js",
                 "optional": true,
                 "default": ""
             },
@@ -544,7 +548,7 @@
                 "name": "editorMode",
                 "type": "select",
                 "label": "Editor mode",
-                "description": "Choose whether learners see a code editor, a block-based editor, or both panels with a toggle.",
+                "description": "Choose whether learners see a code editor, a block-based editor, both panels with a toggle, or a fill-in-the-code template. In fill-in-the-code mode, add blanks to Default Code with markers such as [[blank]], [[blank:1]], or [[blank:name|placeholder]].",
                 "default": "code",
                 "options": [
                     {
@@ -558,6 +562,10 @@
                     {
                         "value": "both",
                         "label": "Both – blocks are source of truth, code preview is read-only"
+                    },
+                    {
+                        "value": "fill-blanks",
+                        "label": "Fill in code blanks"
                     }
                 ]
             },

@@ -1,4 +1,6 @@
 import JavaRunner from './javarunner';
+import CanvasRuntimeManager from '../../../../H5P.LibCodeTools-6.0/src/scripts/runtime/canvas-runtime-manager';
+import P5CanvasBridge from '../../../../H5P.LibCodeTools-6.0/src/scripts/services/p5-canvas-bridge';
 
 /**
  * Java Runtime for executing Java code using JavaRunner (TeaVM-based).
@@ -18,6 +20,39 @@ export default class JavaRuntime extends H5P.Runtime {
     }
 
     this.runner = this.getRunner();
+  }
+
+  /**
+   * Returns the shared canvas manager used for p5 output.
+   * @returns {CanvasRuntimeManager|null} Canvas manager.
+   */
+  getCanvasRuntimeManager() {
+    if (!this.codeContainer?.getCanvasManager) {
+      return null;
+    }
+
+    if (!this._canvasRuntimeManager) {
+      this._canvasRuntimeManager = new CanvasRuntimeManager(
+        this.codeContainer.getCanvasManager(),
+        this.runner,
+      );
+    }
+
+    return this._canvasRuntimeManager;
+  }
+
+  /**
+   * Returns the bridge that executes p5 calls emitted from TeaVM code.
+   * @returns {P5CanvasBridge} p5 bridge.
+   */
+  getP5Bridge() {
+    if (!this._p5Bridge) {
+      this._p5Bridge = new P5CanvasBridge({
+        p5CdnUrl: this.options?.p5CdnUrl,
+      });
+    }
+
+    return this._p5Bridge;
   }
 
   /**
@@ -79,7 +114,10 @@ export default class JavaRuntime extends H5P.Runtime {
    * @returns {object} JavaRunner options.
    */
   getRunnerOptions() {
-    return { ...(this.options ?? {}) };
+    return {
+      ...(this.options ?? {}),
+      canvasBridge: this._p5Bridge || null,
+    };
   }
 
   /**
@@ -103,6 +141,7 @@ export default class JavaRuntime extends H5P.Runtime {
 
     const workspace = this.getRuntimeWorkspace(code);
     const hasSourceFiles = Array.isArray(workspace?.files) && workspace.files.length > 0;
+    await this.prepareCanvasIfNeeded(workspace, code);
 
     if (hasSourceFiles && typeof this.runner.executeProject === 'function') {
       await this.runner.executeProject(workspace, code);
@@ -110,6 +149,43 @@ export default class JavaRuntime extends H5P.Runtime {
     }
 
     await this.runner.execute(code);
+  }
+
+  /**
+   * Attaches and prepares the p5 canvas when the project uses H5P5.
+   * @param {object|null} workspace Workspace snapshot.
+   * @param {string} code Fallback code.
+   * @returns {Promise<void>} Resolves when the canvas is ready or not needed.
+   */
+  async prepareCanvasIfNeeded(workspace, code = '') {
+    if (!this.containsH5P5Code(workspace, code)) {
+      this.runner?.setCanvasBridge?.(null);
+      return;
+    }
+
+    const canvasManager = this.getCanvasRuntimeManager();
+    if (!canvasManager) {
+      return;
+    }
+
+    const canvasDiv = canvasManager.attachCanvas('p5', 'java');
+    const bridge = this.getP5Bridge();
+    await bridge.mount(canvasDiv);
+    this.runner?.setCanvasBridge?.(bridge);
+  }
+
+  /**
+   * Checks the live project for H5P5 usage.
+   * @param {object|null} workspace Workspace snapshot.
+   * @param {string} fallbackCode Fallback source.
+   * @returns {boolean} True if Java code uses the p5 facade.
+   */
+  containsH5P5Code(workspace, fallbackCode = '') {
+    const sources = Array.isArray(workspace?.files)
+      ? workspace.files.map((file) => file?.code)
+      : [fallbackCode];
+
+    return sources.some((source) => /\bH5P5\b/.test(String(source || '')));
   }
 
   /**

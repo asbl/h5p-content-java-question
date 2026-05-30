@@ -7,6 +7,7 @@ export default class TeaVmFrameRunner {
     this.options = options;
     this.urls = new TeaVmAssetResolver(options).buildUrls();
     this.diagnosticFormatter = new TeaVmDiagnosticFormatter();
+    this.canvasBridge = options.canvasBridge || null;
   }
 
   createHiddenFrame() {
@@ -103,13 +104,21 @@ export default class TeaVmFrameRunner {
         }
 
         const message = event.data || {};
+        if (this.canvasBridge?.handleMessage?.(message)) {
+          return;
+        }
+
         if (message.command === 'ready') {
           iframe.contentWindow.postMessage({ code: wasm }, '*');
           return;
         }
 
         if (message.command === 'stdout') {
-          stdout += `${this.diagnosticFormatter.firstString(message.line)}\n`;
+          const line = this.diagnosticFormatter.firstString(message.line);
+          if (this.canvasBridge?.handleStdoutLine?.(line)) {
+            return;
+          }
+          stdout += `${line}\n`;
           return;
         }
 
@@ -124,8 +133,9 @@ export default class TeaVmFrameRunner {
         }
 
         if (message.command === 'finished') {
+          const canvasCommands = this.canvasBridge?.getCommandLog?.() || [];
           cleanup();
-          resolve({ stdout, stderr, exitCode: 0 });
+          resolve({ stdout, stderr, exitCode: 0, canvasCommands });
         }
       };
 

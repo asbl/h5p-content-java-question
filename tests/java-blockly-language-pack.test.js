@@ -64,4 +64,27 @@ describe('Java Blockly language pack', () => {
     expect(code).toContain('unsupportedBlock("unknown_block");');
     expect(code).toContain('private static <T> T unsupportedBlock(String blockType)');
   });
+
+  it('generates H5P5 calls for shared graphics blocks', () => {
+    const size = block('graphics_canvas_size', {
+      inputs: {
+        WIDTH: block('math_number', { fields: { NUM: 400 }, outputConnection: {} }),
+        HEIGHT: block('math_number', { fields: { NUM: 300 }, outputConnection: {} }),
+      },
+      next: block('graphics_circle', {
+        inputs: {
+          X: block('math_number', { fields: { NUM: 200 }, outputConnection: {} }),
+          Y: block('math_number', { fields: { NUM: 150 }, outputConnection: {} }),
+          D: block('math_number', { fields: { NUM: 80 }, outputConnection: {} }),
+        },
+      }),
+    });
+
+    const code = generateJavaFromBlocklyWorkspace({
+      getTopBlocks: () => [size],
+    });
+
+    expect(code).toContain('H5P5.createCanvas(400, 300);');
+    expect(code).toContain('H5P5.circle(200, 150, 80);');
+  });
 });
