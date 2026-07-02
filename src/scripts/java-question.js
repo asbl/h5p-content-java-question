@@ -46,7 +46,7 @@ export default class JavaQuestion extends H5P.CodeQuestion {
   constructor(params, contentId, extras = {}) {
     super(params, contentId, extras);
     this.params = params;
-    this.hasCheckButton = true;
+    this.hasCheckButton = this.contentType !== 'ide_only';
     this.hasStopButton = false;
     this.language = 'java';
   }
@@ -179,7 +179,7 @@ export default class JavaQuestion extends H5P.CodeQuestion {
       teavmFrameUrl: getAdvancedLibraryUrl(advancedOptions, 'teavmFrameUrl'),
       teavmFrameScriptUrl: getAdvancedLibraryUrl(advancedOptions, 'teavmFrameScriptUrl'),
       p5CdnUrl: getAdvancedLibraryUrl(advancedOptions, 'p5CdnUrl'),
-      disableOutputPopups: advancedOptions.disableOutputPopups === true,
+      disableOutputPopups: this.contentType === 'ide_only' || advancedOptions.disableOutputPopups === true,
       compileTimeoutMs: Number(advancedOptions.compileTimeoutMs || 120000),
       executionTimeoutMs: Number(advancedOptions.executionTimeoutMs || 10000),
       maxOutputChars: Number(advancedOptions.maxOutputChars || 20000),
