@@ -1,7 +1,7 @@
 import {
   buildGraphicsCategory,
   registerGraphicsBlocks,
-} from '../../../../H5P.LibCodeTools-6.0/src/scripts/editor/blockly/graphics-blocks';
+} from '@libcodetools/scripts/editor/blockly/graphics-blocks';
 
 function javaValue(block, generator, inputName, fallback = '0') {
   const target = block?.getInputTargetBlock?.(inputName);

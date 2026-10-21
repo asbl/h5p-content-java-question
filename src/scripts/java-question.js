@@ -7,7 +7,7 @@ import {
   normalizeEditorMode,
   normalizePlainObject,
   parseExternalLibraryUrlsYaml,
-} from '../../../H5P.LibCodeTools-6.0/src/scripts/services/code-question-config';
+} from '@libcodetools/scripts/services/code-question-config';
 
 export { parseExternalLibraryUrlsYaml };
 
@@ -88,6 +88,7 @@ export default class JavaQuestion extends H5P.CodeQuestion {
       blocklyCdnUrl: getAdvancedLibraryUrl(advancedOptions, 'blocklyCdnUrl'),
       codeMirrorCdnUrl: getAdvancedLibraryUrl(advancedOptions, 'codeMirrorCdnUrl'),
       markdownCdnUrl: getAdvancedLibraryUrl(advancedOptions, 'markdownCdnUrl'),
+      mermaidCdnUrl: getAdvancedLibraryUrl(advancedOptions, 'mermaidCdnUrl'),
       fontAwesomeCdnUrl: getAdvancedLibraryUrl(advancedOptions, 'fontAwesomeCdnUrl'),
       sweetAlertCdnUrl: getAdvancedLibraryUrl(advancedOptions, 'sweetAlertCdnUrl'),
       jsZipCdnUrl: getAdvancedLibraryUrl(advancedOptions, 'jsZipCdnUrl'),

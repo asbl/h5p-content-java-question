@@ -11,7 +11,7 @@ import {
 import {
   blocklyProjectClassRegistry,
   ProjectClassSymbolExtractor,
-} from '../../../../H5P.LibCodeTools-6.0/src/scripts/editor/blockly/project-symbols';
+} from '@libcodetools/scripts/editor/blockly/project-symbols';
 
 function buildJavaProjectCategory(context = {}) {
   const classNames = new ProjectClassSymbolExtractor(context, {

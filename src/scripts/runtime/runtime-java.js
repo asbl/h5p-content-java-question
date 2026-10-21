@@ -1,6 +1,6 @@
 import JavaRunner from './javarunner';
-import CanvasRuntimeManager from '../../../../H5P.LibCodeTools-6.0/src/scripts/runtime/canvas-runtime-manager';
-import P5CanvasBridge from '../../../../H5P.LibCodeTools-6.0/src/scripts/services/p5-canvas-bridge';
+import CanvasRuntimeManager from '@libcodetools/scripts/runtime/canvas-runtime-manager';
+import P5CanvasBridge from '@libcodetools/scripts/services/p5-canvas-bridge';
 
 /**
  * Java Runtime for executing Java code using JavaRunner (TeaVM-based).
