@@ -130,6 +130,44 @@
                     }
                 },
                 {
+                    "name": "playerMode",
+                    "type": "boolean",
+                    "label": "Player mode",
+                    "description": "The code is only played: no editor is shown, learners just run it and see the output (console, canvas, ...). Requires 'Show Editor?' to be enabled.",
+                    "default": false,
+                    "widget": "showWhen",
+                    "showWhen": {
+                        "rules": [
+                            {
+                                "field": "type",
+                                "equals": [
+                                    "code"
+                                ]
+                            }
+                        ]
+                    },
+                    "optional": true
+                },
+                {
+                    "name": "playerShowCodeButton",
+                    "type": "boolean",
+                    "label": "Offer 'Show code' button",
+                    "description": "In player mode, learners can reveal the code with a button. If disabled, the code stays hidden.",
+                    "default": true,
+                    "widget": "showWhen",
+                    "showWhen": {
+                        "rules": [
+                            {
+                                "field": "type",
+                                "equals": [
+                                    "code"
+                                ]
+                            }
+                        ]
+                    },
+                    "optional": true
+                },
+                {
                     "type": "text",
                     "name": "code",
                     "optional": true,
@@ -468,6 +506,22 @@
                 ]
             },
             {
+                "name": "playerMode",
+                "type": "boolean",
+                "label": "Player mode",
+                "description": "The code is only played: no editor is shown, learners just run it and see the output (console, canvas, ...).",
+                "default": false,
+                "optional": true
+            },
+            {
+                "name": "playerShowCodeButton",
+                "type": "boolean",
+                "label": "Offer 'Show code' button",
+                "description": "In player mode, learners can reveal the code with a button. If disabled, the code stays hidden.",
+                "default": true,
+                "optional": true
+            },
+            {
                 "label": "Post code",
                 "name": "postCode",
                 "type": "text",
@@ -646,6 +700,7 @@
                     "field": "contentType",
                     "equals": [
                         "ide_only",
+                        "text_only",
                         "text_and_ide"
                     ]
                 }
@@ -670,6 +725,74 @@
                     {
                         "value": "byOutputMatch",
                         "label": "By Output Match (check output against expected text)"
+                    },
+                    {
+                        "value": "multipleChoice",
+                        "label": "Multiple Choice"
+                    }
+                ]
+            },
+            {
+                "name": "multipleChoice",
+                "type": "group",
+                "label": "Multiple Choice",
+                "description": "Use Markdown for answer options. Code fences and Mermaid/UML diagrams are supported when the Markdown renderer is available.",
+                "widget": "showWhen",
+                "showWhen": {
+                    "rules": [
+                        {
+                            "field": "gradingMethod",
+                            "equals": "multipleChoice"
+                        }
+                    ]
+                },
+                "fields": [
+                    {
+                        "name": "allowMultiple",
+                        "type": "boolean",
+                        "label": "Allow multiple correct answers",
+                        "description": "If enabled, learners can select several answer options.",
+                        "default": false
+                    },
+                    {
+                        "name": "shuffleAnswers",
+                        "type": "boolean",
+                        "label": "Randomize answer order",
+                        "description": "If enabled, the order of the answer options is shuffled for each learner.",
+                        "default": false
+                    },
+                    {
+                        "name": "choices",
+                        "type": "list",
+                        "label": "Answer options",
+                        "entity": "answer option",
+                        "min": 2,
+                        "field": {
+                            "name": "choice",
+                            "type": "group",
+                            "label": "Answer option",
+                            "fields": [
+                                {
+                                    "name": "text",
+                                    "type": "text",
+                                    "label": "Answer text",
+                                    "description": "Write the answer option as Markdown. You can use code fences or Mermaid diagrams.",
+                                    "widget": "codeWidget",
+                                    "options": [
+                                        {
+                                            "language": "markdown",
+                                            "showAlways": true
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "correct",
+                                    "type": "boolean",
+                                    "label": "Correct answer",
+                                    "default": false
+                                }
+                            ]
+                        }
                     }
                 ]
             },
