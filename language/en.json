@@ -151,6 +151,18 @@
         {
           "label": "Trim whitespace when comparing",
           "description": "If enabled, leading/trailing whitespace is ignored when comparing outputs."
+        },
+        {
+          "label": "Due Date Settings",
+          "fields": [
+            {
+              "label": "Enable Due Date"
+            },
+            {
+              "label": "Due Date",
+              "default": "01.01.1970"
+            }
+          ]
         }
       ]
     }

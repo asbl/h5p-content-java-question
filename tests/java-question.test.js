@@ -178,3 +178,16 @@ describe('JavaQuestion', () => {
     });
   });
 });
+
+describe('JavaQuestion deadline setting', () => {
+  it('offers the deadline field in the grading settings', async () => {
+    const { default: semantics } = await import('../semantics.json');
+    const grading = semantics.find((field) => field.name === 'gradingSettings');
+    const group = grading.fields.find((field) => field.name === 'dueDateGroup');
+
+    expect(group.fields.map((field) => [field.name, field.widget])).toEqual([
+      ['enableDueDate', undefined],
+      ['duedate', 'datetime'],
+    ]);
+  });
+});
