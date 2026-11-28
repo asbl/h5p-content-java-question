@@ -165,6 +165,24 @@
           ]
         }
       ]
+    },
+    {
+      "label": "Hint Cascade",
+      "description": "Didactic hints that learners can reveal one by one after the first wrong answer. Order them from conceptual to strategic to a partial solution.",
+      "fields": [
+        {
+          "label": "Enable hint button",
+          "description": "Shows a hint button after the first wrong answer. Each click reveals the next hint below. Hint usage is reported via xAPI."
+        },
+        {
+          "label": "Hints",
+          "description": "First hint: conceptual nudge. Second: strategy. Last: closest to the solution.",
+          "entity": "hint",
+          "field": {
+            "label": "Hint"
+          }
+        }
+      ]
     }
   ],
   "libraryStrings": {
